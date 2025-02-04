@@ -63,16 +63,34 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void onSquarePressed() {
+    try {
+      // Use the current result or input value for squaring
+      double value = input.isNotEmpty ? double.parse(input) : double.parse(result);
+      setState(() {
+        result = (value * value).toString(); // Update the result with the squared value
+        input = ''; // Clear the input to avoid appending to it
+      });
+    } catch (e) {
+      setState(() {
+        result = 'Error'; // Show error if the input is invalid
+      });
+    }
+  }
+
   Widget buildButton(String text, {Color? color, void Function()? onPressed}) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: color ?? Colors.blue,
+        backgroundColor: color ?? Colors.blue, // Button background color
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       onPressed: onPressed,
       child: Text(
         text,
-        style: const TextStyle(fontSize: 20),
+        style: const TextStyle(
+          fontSize: 20,
+          color: Colors.white, // Updated text color to white
+        ),
       ),
     );
   }
@@ -130,8 +148,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 buildButton('-', color: Colors.orange, onPressed: () => onNumberPressed('-')),
                 buildButton('C', color: Colors.red, onPressed: onClearPressed),
                 buildButton('0', onPressed: () => onNumberPressed('0')),
-                buildButton('=', color: Colors.green, onPressed: onEvaluatePressed),
+                buildButton('=', color: Colors.green, onPressed: onEvaluatePressed), // Equal button retained
                 buildButton('+', color: Colors.orange, onPressed: () => onNumberPressed('+')),
+              ],
+            ),
+            const SizedBox(height: 8),
+            // New row for additional buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                buildButton('x²', color: Colors.purple, onPressed: onSquarePressed), // New square button
               ],
             ),
           ],
